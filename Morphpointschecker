@@ -20,14 +20,19 @@
       event.preventDefault();
 
       var customerID = document.getElementById("customerID").value;
-      var url = "YOUR_DEPLOYED_WEB_APP_URL?customerID=" + encodeURIComponent(customerID);
+      var url = "https://script.google.com/macros/s/AKfycbyAPBCvLCLaz6GfA91_JaxGwhN4vGuS2Pt-UiLsSMycP6PYSa6nUdtOA4RivxtmUHlG/exec" + encodeURIComponent(customerID);
 
       // Fetch data from the Apps Script Web App
       fetch(url)
         .then(response => response.json())
         .then(data => {
-          // Display the total points or an error message
-          document.getElementById("pointsDisplay").innerText = data.totalPoints;
+          if (data.totalPoints === "Customer not found") {
+            document.getElementById("pointsDisplay").innerText = "Customer not found.";
+          } else if (data.error) {
+            document.getElementById("pointsDisplay").innerText = data.error;
+          } else {
+            document.getElementById("pointsDisplay").innerText = data.totalPoints;
+          }
         })
         .catch(error => {
           console.error("Error fetching points:", error);
